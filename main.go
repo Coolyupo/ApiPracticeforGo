@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gurubear/controller"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,11 @@ func main() {
 			"message": "hello world",
 		})
 	})
-	r.Run()
+	// o := controller.GetUser()
+	r.GET("/getUser", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, controller.GetUser())
+	})
+
+	r.Run(":8080")
 
 }
