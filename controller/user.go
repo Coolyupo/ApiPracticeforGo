@@ -1,19 +1,23 @@
 package controller
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 )
 
 type user struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	UserID     uuid.UUID
+	Name       string
+	CreateTime time.Time
+	ModifyTime time.Time
 }
 
 func GetUser() []user {
 
-	userA := []user{{ID: uuid.New().String(), Name: "Alan"}}
+	userA := []user{{UserID: uuid.New(), Name: "Alan", CreateTime: time.Now(), ModifyTime: time.Now()}}
 
-	userA = append(userA, user{ID: uuid.New().String(), Name: "Mark"})
+	userA = append(userA, user{UserID: uuid.New(), Name: "Mark", CreateTime: time.Now(), ModifyTime: time.Now()})
 
 	return userA
 }
