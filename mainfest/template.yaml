@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: first-golang-api
+  name: first-golang-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: first-golang-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: first-golang-api
+    spec:
+      containers:
+      - image: coolyupo/mygolangapi:v1-alpine
+        imagePullPolicy: IfNotPresent
+        name: mygolangapi
+        enviroment:
+        - name: DB_USER
+          value: ""
+        - name:  DB_PASSWORD
+          value: ""
+        - name:  DB_NAME
+          value: ""
+        - name:  DB_HOST
+          value: ""
+        - name:  DB_PORT
+          value: ""
+        resources: {}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
