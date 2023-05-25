@@ -27,3 +27,12 @@ run:
 ```shell
 go run .
 ```
+
+
+some note for myself:
+
+- if any type or function will be referenced by other package, the first letter should be uppercase e.g.  'Apple'.
+
+- pkg, [Library code that's ok to use by external applications](https://pkg.go.dev/github.com/geektime007/mgmt/pkg#section-readme)
+
+
