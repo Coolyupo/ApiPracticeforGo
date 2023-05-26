@@ -1,4 +1,4 @@
-package v1
+package user
 
 import (
 	"net/http"
@@ -17,23 +17,23 @@ type repository interface {
 	DeleteUser(ID uuid.UUID) bool
 }
 
-type UserController struct {
+type Controller struct {
 	//internal use
 	service repository
 }
 
 // InitController initializes the user controller.
-func UserInitController(userRepo *userrepo.UserRepo) *UserController {
-	return &UserController{
+func InitController(userRepo *userrepo.UserRepo) *Controller {
+	return &Controller{
 		service: userRepo,
 	}
 }
 
-func (controller *UserController) GetUser(c *gin.Context) {
+func (controller *Controller) GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, controller.service.GetUser())
 }
 
-func (controller *UserController) CreateUser(c *gin.Context) {
+func (controller *Controller) CreateUser(c *gin.Context) {
 	var user models.Users
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
@@ -48,7 +48,22 @@ func (controller *UserController) CreateUser(c *gin.Context) {
 	}
 }
 
-func (controller *UserController) DeleteUser(c *gin.Context) {
+func (controller *Controller) UpdateUser(c *gin.Context) {
+	var user models.Users
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	result := controller.service.UpdateUser(user)
+	if result {
+		c.JSON(http.StatusOK, gin.H{"message": "success updated"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"message": "fail updated"})
+	}
+}
+
+func (controller *Controller) DeleteUser(c *gin.Context) {
 	ID := c.PostForm("id")
 	if ID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "No Specific ID"})
@@ -66,18 +81,4 @@ func (controller *UserController) DeleteUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "fail deleted"})
 	}
 
-}
-func (controller *UserController) UpdateUser(c *gin.Context) {
-	var user models.Users
-	err := c.ShouldBindJSON(&user)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	result := controller.service.UpdateUser(user)
-	if result {
-		c.JSON(http.StatusOK, gin.H{"message": "success updated"})
-	} else {
-		c.JSON(http.StatusOK, gin.H{"message": "fail updated"})
-	}
 }

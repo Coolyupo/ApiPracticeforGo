@@ -1,17 +1,20 @@
 package controller
 
 import (
-	v1 "gurubear/controller/api/v1"
+	postv1 "gurubear/controller/api/v1/post"
+	userv1 "gurubear/controller/api/v1/user"
 	"gurubear/repository"
 )
 
 type Controllers struct {
-	UserController *v1.UserController
+	UserController *userv1.Controller
+	PostController *postv1.Controller
 }
 
 // InitControllers returns a new Controllers
 func InitControllers(repositories *repository.Repositories) *Controllers {
 	return &Controllers{
-		UserController: v1.UserInitController(repositories.UserRepo),
+		UserController: userv1.InitController(repositories.UserRepo),
+		PostController: postv1.InitController(repositories.PostRepo),
 	}
 }
